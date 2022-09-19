@@ -17,40 +17,66 @@ namespace calculatorwinf
             InitializeComponent();
         }
 
-
-
         private void button1_Click(object sender, EventArgs e)
         {
-
-            double a, b;
-            a = Convert.ToDouble(Box1.Text);
-            b = Convert.ToDouble(Box2.Text);
-
-            switch (comboBox1.Text)
+            double num1, num2;
+            char sign;
+            string str, n1 = null, n2 = null;
+            str = Box1.Text;
+            for (int i = 0; i < str.Length; i++)
             {
-                case "+":
-                    Box1.Text = Convert.ToString(a + b);
-                    Box3.Text = Convert.ToString($"{a} + {b} = {a + b}");
-                    break;
-                case "-":
-                    Box1.Text = Convert.ToString(a - b);
-                    Box3.Text = Convert.ToString($"{a} - {b} = {a - b}");
-                    break;
-                case "*":
-                    Box1.Text = Convert.ToString(a * b);
-                    Box3.Text = Convert.ToString($"{a} * {b} = {a * b}");
-                    break;
-                case "/":
+                if (str[i] == '+' | str[i] == '-' | str[i] == '*' | str[i] == '/')
+                {
+                    bool isParsable1 = Int32.TryParse(n1, out _);
+                    if (isParsable1)
                     {
-                        if (b != 0)
+                        sign = str[i];
+                        num1 = Int32.Parse(n1);
+                        for (int j = i + 1; j < str.Length + 1; j++)
                         {
-                            Box1.Text = Convert.ToString(a / b);
-                            Box3.Text = Convert.ToString($"{a} / {b} = {a / b}");
+                            if (j == str.Length)
+                            {
+                                bool isParsable2 = Int32.TryParse(n2, out _);
+                                if (isParsable2)
+                                {
+                                    num2 = Int32.Parse(n2);
+
+                                    switch (sign)
+                                    {
+                                        case '+':
+                                            Box1.Text = Convert.ToString(num1 + num2);
+                                            break;
+                                        case '-':
+                                            Box1.Text = Convert.ToString(num1 - num2);
+                                            break;
+                                        case '*':
+                                            Box1.Text = Convert.ToString(num1 * num2);
+                                            break;
+                                        case '/':
+                                            {
+                                                if (num1 != 0)
+                                                {
+                                                    Box1.Text = Convert.ToString(num1 / num2);
+                                                }
+                                                break;
+                                            }
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    Box1.Text = "error";
+                                    break;
+                                }
+                            }
+                            n2 += str[j];
                         }
-                        else
-                            Box3.Text = "error";
                         break;
                     }
+                    else
+                        Box1.Text = "error";
+                }
+                n1 += str[i];
             }
         }
     }
